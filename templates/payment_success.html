@@ -1,0 +1,27 @@
+<!-- payment_success.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Successful</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/payment_styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="success-message">
+            <div class="check-icon">✓</div>
+            <h2>Payment Successful!</h2>
+            <p>Your payment of ₹{{ amount }} has been processed successfully.</p>
+            <p>A receipt has been sent to your registered mobile number and email.</p>
+            <div class="transaction-details">
+                <p>Transaction ID: TXN{{ range(100000, 999999) | random }}</p>
+            </div>
+            <div class="buttons">
+                <a href="{{ url_for('index') }}" class="btn">Back to Home</a>
+                <button class="btn secondary" onclick="window.print()">Print Receipt</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

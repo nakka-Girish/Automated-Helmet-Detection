@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Gateway</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/payment_styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="payment-form">
+            <h2>Helmet Violation Penalty Payment</h2>
+            {% if error %}
+            <div class="error-message">{{ error }}</div>
+            {% endif %}
+            
+            <div class="penalty-details">
+                <h3>Violation Details</h3>
+                <table>
+                    <tr>
+                        <td>Name:</td>
+                        <td>{{ penalty_data.name }}</td>
+                    </tr>
+                    <tr>
+                        <td>Vehicle Number:</td>
+                        <td>{{ penalty_data.vehicle_number }}</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>Penalty Amount:</td>
+                        <td>₹{{ penalty_data.penalty_amount }}</td>
+                    </tr>
+                    
+    
+                </table>
+            </div>
+            
+            <form action="{{ url_for('process_payment') }}" method="POST" id="paymentForm">
+                <div class="form-group">
+                    <label>Select Payment Method:</label>
+                    <div class="payment-options">
+                        <div class="payment-option">
+                            <input type="radio" id="upi" name="payment_method" value="upi" checked>
+                            <label for="upi">UPI</label>
+                        </div>
+                        <div class="payment-option">
+                            <input type="radio" id="netbanking" name="payment_method" value="netbanking">
+                            <label for="netbanking">Net Banking</label>
+                        </div>
+                        <div class="payment-option">
+                            <input type="radio" id="card" name="payment_method" value="card">
+                            <label for="card">Debit/Credit Card</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="payment-details" id="upiDetails">
+                    <div class="form-group">
+                        <label for="upi_id">UPI ID:</label>
+                        <input type="text" id="upi_id" name="upi_id" placeholder="example@upi">
+                    </div>
+                </div>
+                
+                <div class="payment-details" id="netbankingDetails" style="display:none;">
+                    <div class="form-group">
+                        <label for="bank">Select Bank:</label>
+                        <select id="bank" name="bank">
+                            <option value="">Select Bank</option>
+                            <option value="sbi">State Bank of India</option>
+                            <option value="hdfc">HDFC Bank</option>
+                            <option value="icici">ICICI Bank</option>
+                            <option value="axis">Axis Bank</option>
+                            <option value="pnb">Punjab National Bank</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="payment-details" id="cardDetails" style="display:none;">
+                    <div class="form-group">
+                        <label for="card_number">Card Number:</label>
+                        <input type="text" id="card_number" name="card_number" placeholder="1234 5678 9012 3456">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group half">
+                            <label for="expiry">Expiry (MM/YY):</label>
+                            <input type="text" id="expiry" name="expiry" placeholder="MM/YY">
+                        </div>
+                        <div class="form-group half">
+                            <label for="cvv">CVV:</label>
+                            <input type="password" id="cvv" name="cvv" placeholder="123">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="card_name">Name on Card:</label>
+                        <input type="text" id="card_name" name="card_name">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="amount">Amount to Pay (₹):</label>
+                    <input type="number" id="amount" name="amount" min="1" max="{{ penalty_data.penalty_amount }}" value="{{ penalty_data.penalty_amount }}" required>
+                </div>
+                
+                <button type="submit" class="btn pay-btn">Pay Now</button>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const paymentOptions = document.querySelectorAll('input[name="payment_method"]');
+            const upiDetails = document.getElementById('upiDetails');
+            const netbankingDetails = document.getElementById('netbankingDetails');
+            const cardDetails = document.getElementById('cardDetails');
+            
+            function updatePaymentDetails() {
+                const selectedMethod = document.querySelector('input[name="payment_method"]:checked').value;
+                
+                upiDetails.style.display = 'none';
+                netbankingDetails.style.display = 'none';
+                cardDetails.style.display = 'none';
+                
+                if (selectedMethod === 'upi') {
+                    upiDetails.style.display = 'block';
+                } else if (selectedMethod === 'netbanking') {
+                    netbankingDetails.style.display = 'block';
+                } else if (selectedMethod === 'card') {
+                    cardDetails.style.display = 'block';
+                }
+            }
+            
+            paymentOptions.forEach(option => {
+                option.addEventListener('change', updatePaymentDetails);
+            });
+        });
+    </script>
+</body>
+</html>

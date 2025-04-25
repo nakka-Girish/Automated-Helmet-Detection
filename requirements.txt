@@ -1,0 +1,12 @@
+easyocr==1.7.2
+Flask==3.1.0
+geocoder==1.38.1
+opencv_contrib_python==4.11.0.86
+opencv_python==4.11.0.86
+opencv_python_headless==4.11.0.86
+pandas==2.2.3
+Requests==2.32.3
+torch==2.5.0
+twilio==9.4.6
+ultralytics==8.0.200
+Werkzeug==3.1.3
